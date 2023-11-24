@@ -41,4 +41,14 @@ class User extends Authenticatable implements MustVerifyEmail // 追記
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    public function microposts()
+    {
+        return $this->hasMany(Micropost::class);
+    }
+    
+    public function loadRelationshipCounts()
+    {
+        $this->loadCount('microposts');
+    }
 }
