@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MicropostsController;
 use App\Http\Controllers\UserFollowController;
+use App\Http\Controllers\FavoritesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,8 +30,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('unfollow', [UserFollowController::class, 'destroy'])->name('user.unfollow');
         Route::get('followings', [UsersController::class, 'followings'])->name('users.followings');
         Route::get('followers', [UsersController::class, 'followers'])->name('users.followers');
+        Route::get('favorites', [UsersController::class, 'favorites'])->name('users.favorites');
     });
     
     Route::resource('users', UsersController::class, ['only' => ['index', 'show']]);
     Route::resource('microposts', MicropostsController::class, ['only' => ['store', 'destroy']]);
+
+    Route::group(['prefix' => 'microposts/{id}'], function () {
+        Route::post('favorites', [FavoritesController::class, 'store'])->name('favorites.favorite');
+        Route::delete('unfavorite', [FavoritesController::class, 'destroy'])->name('favorites.unfavorite');
+    }); 
 });
+
+
+

@@ -15,14 +15,33 @@
                             <a class="link link-hover text-info" href="{{ route('users.show', $micropost->user->id) }}">{{ $micropost->user->name }}</a>
                             <span class="text-muted text-gray-500">posted at {{ $micropost->created_at }}</span>
                         </div>
+                
                         <div>
                             {{-- 投稿内容 --}}
                             <p class="mb-0">{!! nl2br(e($micropost->content)) !!}</p>
                         </div>
-                        <div>
+                        
+                        <div class="flex">
+                            {{-- 投稿お気に入りボタンのフォーム --}}
+                            @if (Auth::user()->is_favorite($micropost->id))
+                                {{-- アンお気に入りボタンのフォーム --}}
+                                <form class="flex-none" method="POST" action="{{ route('favorites.unfavorite', $micropost->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-error btn-sm normal-case" 
+                                        onclick="return confirm('id = {{ $user->id }} のお気に入りを外します。よろしいですか？')">Unfollow</button>
+                                </form>
+                            @else
+                                {{-- お気に入りボタンのフォーム --}}
+                                <form class="flex-none" method="POST" action="{{ route('favorites.favorite', $micropost->id) }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary btn-sm normal-case">Favorite</button>
+                                </form>
+                            @endif
+                            
                             @if (Auth::id() == $micropost->user_id)
                                 {{-- 投稿削除ボタンのフォーム --}}
-                                <form method="POST" action="{{ route('microposts.destroy', $micropost->id) }}">
+                                <form class="ml-4" method="POST" action="{{ route('microposts.destroy', $micropost->id) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-error btn-sm normal-case" 
@@ -38,3 +57,4 @@
         {{ $microposts->links() }}
     @endif
 </div>
+

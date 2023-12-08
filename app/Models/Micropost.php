@@ -16,6 +16,13 @@ class Micropost extends Model
      */
     public function user()
     {
+        // Userクラスに属している
         return $this->belongsTo(User::class);
+    }
+    
+    public function favorite_users()
+    {
+        // UserモデルとMicropostモデルが多対多の関係であることを示す
+        return $this->belongsToMany(Micropost::class, 'favorites', 'user_id', 'micropost_id')->withTimestamps();
     }
 }

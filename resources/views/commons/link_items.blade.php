@@ -1,4 +1,6 @@
 @if (Auth::check())
+    {{-- dashboardページへのリンク --}}
+    <li><a class="link link-hover" href="{{ route('dashboard') }}">dashboard</a></li>
     {{-- ユーザ一覧ページへのリンク --}}
     <li><a class="link link-hover" href="{{ route('users.index') }}">Users</a></li>
     {{-- ユーザ詳細ページへのリンク --}}
